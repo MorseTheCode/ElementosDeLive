@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Live Preview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #1e1e1e;
+            color: white;
+        }
+
+        /* Font import for Orbitron Black */
+        @font-face {
+            font-family: 'Orbitron Black';
+            src: url('https://morsethecode.github.io/ElementosDeLive/Boost_Static/3. Individual Files/Fonts/WOFF/Orbitron-Black.woff') format('woff'),
+                 url('https://morsethecode.github.io/ElementosDeLive/Boost_Static/3. Individual Files/Fonts/WOFF2/Orbitron-Black.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        #preview-container {
+            position: relative;
+            width: 800px;
+            height: 450px;
+            margin-top: 20px;
+            background-color: black;
+            overflow: hidden;
+        }
+
+        #background {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://morsethecode.github.io/ElementosDeLive/Boost_Static/3.%20Individual%20Files/Overlays/Boost_Webcam_Label.png");
+            background-size: cover;
+            background-repeat: no-repeat;
+            transform: translate(-50%, -50%);
+        }
+
+        #dynamic-text {
+            position: absolute;
+            top: 92.9%;
+            left: 50%;
+            transform: translate(-50%, -20%);
+            font-size: 3.5vw; /* Valor inicial, será ajustado dinamicamente */
+            font-family: 'Orbitron Black', sans-serif;
+            color: white;
+            text-align: center;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        #menu {
+            width: 800px;
+            background-color: #333;
+            padding: 20px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .input-left {
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="text"], textarea, input[type="range"] {
+            width: 100%;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        label {
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #777;
+        }
+
+        .half-btn {
+            font-weight: bold;
+        }
+
+        .slider-container {
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="preview-container">
+        <div id="background"></div>
+        <div id="dynamic-text">NOME AQUI</div>
+    </div>
+
+    <div id="menu">
+        <label for="textContent"><b>Conteúdo do Texto:</b></label>
+        <input type="text" id="textContent" value="NOME AQUI">
+        <br>
+        
+        <div class="input-group">
+            <div class="input-left">
+                <label for="topPosition"><b>Posição Top (em %):</b></label>
+                <span id="topValue">92.9%</span>
+            </div>
+            <button class="half-btn" id="setTopTo50">Meio</button>
+        </div>
+        <div class="slider-container">
+            <input type="range" id="topPosition" min="0" max="100" step="0.1" value="92.9">
+        </div>
+        
+        <div class="input-group">
+            <div class="input-left">
+                <label for="leftPosition"><b>Posição Left (em %):</b></label>
+                <span id="leftValue">50.0%</span>
+            </div>
+            <button class="half-btn" id="setLeftTo50">Meio</button>
+        </div>
+        <div class="slider-container">
+            <input type="range" id="leftPosition" min="0" max="100" step="0.1" value="50">
+        </div>
+
+        <div class="input-group">
+            <label for="fontSize"><b>Tamanho da Fonte (% em relação à largura da imagem):</b></label>
+            <span id="fontSizeValue">3.5%</span>
+        </div>
+        <div class="slider-container">
+            <input type="range" id="fontSize" min="1" max="20" step="0.1" value="3.5">
+        </div>
+
+        <div class="action-buttons">
+            <button id="generate"><b>Gerar</b></button>
+            <button id="copy" style="display: none;"><b>Copiar</b></button>
+        </div>
+
+        <textarea id="output" readonly rows="10"></textarea>
+    </div>
+
+    <script>
+        const textContent = document.getElementById('textContent');
+        const topPosition = document.getElementById('topPosition');
+        const leftPosition = document.getElementById('leftPosition');
+        const fontSize = document.getElementById('fontSize');
+        const output = document.getElementById('output');
+        const topValue = document.getElementById('topValue');
+        const leftValue = document.getElementById('leftValue');
+        const fontSizeValue = document.getElementById('fontSizeValue');
+        const generateBtn = document.getElementById('generate');
+        const copyBtn = document.getElementById('copy');
+        const dynamicText = document.getElementById('dynamic-text');
+        const setTopTo50 = document.getElementById('setTopTo50');
+        const setLeftTo50 = document.getElementById('setLeftTo50');
+
+        function updatePreview() {
+            const top = `${parseFloat(topPosition.value).toFixed(1)}%`;
+            const left = `${parseFloat(leftPosition.value).toFixed(1)}%`;
+            const fontPercentage = fontSize.value;
+            const background = document.getElementById('background');
+            const containerWidth = background.offsetWidth; // Usando a largura da imagem de fundo
+            const size = `${(fontPercentage * containerWidth / 100)}px`;  // Calculando o tamanho da fonte baseado na largura da imagem
+            const content = textContent.value;
+
+            dynamicText.style.top = top;
+            dynamicText.style.left = left;
+            dynamicText.style.fontSize = size;
+            dynamicText.textContent = content;
+
+            topValue.textContent = top;
+            leftValue.textContent = left;
+            fontSizeValue.textContent = `${fontPercentage}%`; // Exibindo em % mas aplicando em vw baseado no tamanho da imagem
+        }
+
+        function generateCSS() {
+            const top = topPosition.value;
+            const left = leftPosition.value;
+            const fontPercentage = fontSize.value;
+            const background = document.getElementById('background');
+            const containerWidth = background.offsetWidth;
+            const size = `${(fontPercentage)}vw`;  // Gerando o tamanho da fonte em vw baseado na largura da imagem
+            const css = `@font-face {
+    font-family: 'Orbitron Black';
+    src: url('https://morsethecode.github.io/ElementosDeLive/Boost_Static/3. Individual Files/Fonts/WOFF/Orbitron-Black.woff') format('woff'),
+         url('https://morsethecode.github.io/ElementosDeLive/Boost_Static/3. Individual Files/Fonts/WOFF2/Orbitron-Black.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    top: 50%; /* Centraliza verticalmente */
+    left: 50%; /* Centraliza horizontalmente */
+    width: 100%;
+    height: 100%;
+    background-image: url("https://morsethecode.github.io/ElementosDeLive/Boost_Static/3.%20Individual%20Files/Overlays/Boost_Webcam_Label.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    transform: translate(-50%, -50%); /* Centraliza */
+    z-index: 1;
+    pointer-events: none;
+}
+
+body::before {
+    content: "${textContent.value}";
+    position: fixed;
+    top: ${top}%;
+    left: ${left}%;
+    transform: translate(-50%, -20%);
+    color: #FFFFFF;
+    font-size: ${size};
+    font-family: 'Orbitron Black', sans-serif; /* Usa a fonte personalizada */
+    text-align: center;
+    white-space: nowrap;
+    z-index: 2;
+    pointer-events: none;
+}
+`;
+            output.value = css;
+            copyBtn.style.display = 'inline-block'; // Exibir o botão de copiar
+        }
+
+        function copyCSS() {
+            output.select();
+            document.execCommand('copy');
+        }
+
+        // Funções dos botões "Meio"
+        setTopTo50.addEventListener('click', () => {
+            topPosition.value = 50;
+            updatePreview();
+        });
+        setLeftTo50.addEventListener('click', () => {
+            leftPosition.value = 50;
+            updatePreview();
+        });
+
+        textContent.addEventListener('input', updatePreview);
+        topPosition.addEventListener('input', updatePreview);
+        leftPosition.addEventListener('input', updatePreview);
+        fontSize.addEventListener('input', updatePreview);
+
+        generateBtn.addEventListener('click', generateCSS);
+        copyBtn.addEventListener('click', copyCSS);
+
+        // Inicializa a prévia
+        updatePreview();
+    </script>
+</body>
+</html>
