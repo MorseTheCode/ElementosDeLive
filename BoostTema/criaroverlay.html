@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSS Live Preview</title>
+    <title>Criar Overlay</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,8 +19,8 @@
         /* Font import for Orbitron Black */
         @font-face {
             font-family: 'Orbitron Black';
-            src: url('https://morsethecode.github.io/ElementosDeLive/Boost_Static/3. Individual Files/Fonts/WOFF/Orbitron-Black.woff') format('woff'),
-                 url('https://morsethecode.github.io/ElementosDeLive/Boost_Static/3. Individual Files/Fonts/WOFF2/Orbitron-Black.woff2') format('woff2');
+            src: url('files/Fonts/WOFF/Orbitron-Black.woff') format('woff'),
+                 url('files/Fonts/WOFF2/Orbitron-Black.woff2') format('woff2');
             font-weight: normal;
             font-style: normal;
         }
@@ -40,7 +40,7 @@
             left: 50%;
             width: 100%;
             height: 100%;
-            background-image: url("https://morsethecode.github.io/ElementosDeLive/Boost_Static/3.%20Individual%20Files/Overlays/Boost_Webcam_Label.png");
+            background-image: url("files/Overlays/Boost_Webcam_Label.png");
             background-size: cover;
             background-repeat: no-repeat;
             transform: translate(-50%, -50%);
@@ -50,7 +50,7 @@
             position: absolute;
             top: 91.5%;
             left: 50%;
-            transform: translate(-50%, -20%);
+            transform: translate(-50%, -25%);
             font-size: 3.5vw; /* Valor inicial, será ajustado dinamicamente */
             font-family: 'Orbitron Black', sans-serif;
             color: white;
@@ -134,12 +134,12 @@
         <div class="input-group">
             <div class="input-left">
                 <label for="topPosition"><b>Posição Top (em %):</b></label>
-                <span id="topValue">91.5%</span>
+                <span id="topValue">91.9%</span>
             </div>
             <button class="half-btn" id="setTopTo50">Meio</button>
         </div>
         <div class="slider-container">
-            <input type="range" id="topPosition" min="0" max="100" step="0.1" value="91.5">
+            <input type="range" id="topPosition" min="0" max="100" step="0.1" value="91.9">
         </div>
         
         <div class="input-group">
@@ -212,8 +212,8 @@
             const size = `${(fontPercentage)}vw`;  // Gerando o tamanho da fonte em vw baseado na largura da imagem
             const css = `@font-face {
     font-family: 'Orbitron Black';
-    src: url('https://morsethecode.github.io/ElementosDeLive/Boost_Static/3. Individual Files/Fonts/WOFF/Orbitron-Black.woff') format('woff'),
-         url('https://morsethecode.github.io/ElementosDeLive/Boost_Static/3. Individual Files/Fonts/WOFF2/Orbitron-Black.woff2') format('woff2');
+    src: url('https://morsethecode.github.io/ElementosDeLive/BoostTema/files/Fonts/WOFF/Orbitron-Black.woff') format('woff'),
+         url('https://morsethecode.github.io/ElementosDeLive/BoostTema/files/Fonts/WOFF2/Orbitron-Black.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
 }
@@ -225,7 +225,7 @@ body::after {
     left: 50%; /* Centraliza horizontalmente */
     width: 100%;
     height: 100%;
-    background-image: url("https://morsethecode.github.io/ElementosDeLive/Boost_Static/3.%20Individual%20Files/Overlays/Boost_Webcam_Label.png");
+    background-image: url("https://morsethecode.github.io/ElementosDeLive/BoostTema/files/Overlays/Boost_Webcam_Label.png");
     background-size: cover;
     background-repeat: no-repeat;
     transform: translate(-50%, -50%); /* Centraliza */
@@ -236,7 +236,7 @@ body::after {
 body::before {
     content: "${textContent.value}";
     position: fixed;
-    top: ${top}%;
+    top: ${(top)}%;
     left: ${left}%;
     transform: translate(-50%, -20%);
     color: #FFFFFF;
