@@ -30,7 +30,9 @@
             width: 800px;
             height: 450px;
             margin-top: 20px;
-            background-color: black;
+            background-image: url("https://claudia.abril.com.br/wp-content/uploads/2020/01/meme-macaco.jpg?quality=70&strip=all");
+            background-size: cover;
+            background-repeat: no-repeat;
             overflow: hidden;
         }
 
@@ -50,7 +52,7 @@
             position: absolute;
             top: 91.5%;
             left: 50%;
-            transform: translate(-50%, -25%);
+            transform: translate(-50%, -20%);
             font-size: 3.5vw; /* Valor inicial, será ajustado dinamicamente */
             font-family: 'Orbitron Black', sans-serif;
             color: white;
@@ -134,12 +136,12 @@
         <div class="input-group">
             <div class="input-left">
                 <label for="topPosition"><b>Posição Top (em %):</b></label>
-                <span id="topValue">91.9%</span>
+                <span id="topValue">91.5%</span>
             </div>
             <button class="half-btn" id="setTopTo50">Meio</button>
         </div>
         <div class="slider-container">
-            <input type="range" id="topPosition" min="0" max="100" step="0.1" value="91.9">
+            <input type="range" id="topPosition" min="0" max="100" step="0.1" value="91.5">
         </div>
         
         <div class="input-group">
