@@ -1,7 +1,7 @@
 obs = obslua
 
 -- Variável para armazenar o nome da fonte a ser removida
-local source_to_remove = "AAA"
+local source_to_remove = ""
 
 -- Função para verificar e remover a fonte de todas as cenas
 function remove_source_from_all_scenes(source_name)
