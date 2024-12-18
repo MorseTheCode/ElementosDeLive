@@ -1,4 +1,4 @@
-`body::after {
+body::after {
     content: "";
     position: fixed;
     top: 50%;
